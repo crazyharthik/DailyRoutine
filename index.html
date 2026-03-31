@@ -1,0 +1,842 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=DM+Sans:wght@300;400;500;600&display=swap');
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #faf8f4;
+    --surface: #ffffff;
+    --surface2: #f5f2ec;
+    --text: #1a1714;
+    --text2: #5c5750;
+    --text3: #9c9487;
+    --accent: #c4793a;
+    --accent2: #3a7a5c;
+    --accent3: #5a4a7c;
+    --border: rgba(0,0,0,0.08);
+    --gold: #d4a84b;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #18160f;
+      --surface: #201e16;
+      --surface2: #272418;
+      --text: #f0ebe0;
+      --text2: #b5ad9c;
+      --text3: #7a7265;
+      --border: rgba(255,255,255,0.08);
+    }
+  }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  /* NAV */
+  .topnav {
+    position: sticky; top: 0; z-index: 100;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    display: flex; gap: 0; overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .topnav::-webkit-scrollbar { display: none; }
+  .nav-btn {
+    padding: 12px 16px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px; font-weight: 500;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--text3);
+    background: none; border: none;
+    border-bottom: 2px solid transparent;
+    cursor: pointer; white-space: nowrap;
+    transition: color .2s, border-color .2s;
+  }
+  .nav-btn:hover { color: var(--text); }
+  .nav-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+  /* SECTIONS */
+  .section { display: none; padding: 20px 16px 40px; max-width: 680px; margin: 0 auto; }
+  .section.active { display: block; }
+
+  /* HERO */
+  .hero {
+    background: linear-gradient(135deg, var(--accent) 0%, #9a5a25 100%);
+    border-radius: 16px;
+    padding: 28px 24px;
+    margin-bottom: 24px;
+    color: white;
+  }
+  .hero-label { font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; opacity: 0.75; margin-bottom: 6px; }
+  .hero h1 { font-family: 'Playfair Display', serif; font-size: 26px; font-weight: 700; line-height: 1.25; margin-bottom: 8px; }
+  .hero p { font-size: 13px; opacity: 0.85; }
+
+  /* CARDS */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 20px;
+    margin-bottom: 16px;
+  }
+  .card-header {
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 14px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+  }
+  .card-icon {
+    width: 34px; height: 34px; border-radius: 9px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px; flex-shrink: 0;
+  }
+  .icon-skin { background: #fff3e8; }
+  .icon-body { background: #e8f5ef; }
+  .icon-detox { background: #e8f0ff; }
+  .icon-routine { background: #fff8e8; }
+  .icon-week { background: #f0e8ff; }
+  .icon-life { background: #ffe8e8; }
+
+  .card-title { font-family: 'Playfair Display', serif; font-size: 17px; font-weight: 700; }
+  .card-subtitle { font-size: 11px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.08em; }
+
+  /* STEPS */
+  .step-row {
+    display: flex; gap: 12px; margin-bottom: 12px;
+    align-items: flex-start;
+  }
+  .step-num {
+    width: 24px; height: 24px; border-radius: 50%;
+    background: var(--accent); color: white;
+    font-size: 11px; font-weight: 600;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; margin-top: 1px;
+  }
+  .step-num.green { background: var(--accent2); }
+  .step-num.purple { background: var(--accent3); }
+  .step-num.gold { background: var(--gold); }
+
+  .step-content strong { display: block; font-weight: 600; font-size: 13px; color: var(--text); margin-bottom: 2px; }
+  .step-content p { font-size: 12px; color: var(--text2); line-height: 1.5; }
+
+  /* TAGS / PILLS */
+  .pill {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 11px; font-weight: 500;
+    margin: 2px;
+  }
+  .pill-skin { background: #fff3e8; color: #a0561a; }
+  .pill-green { background: #e8f5ef; color: #2a6a42; }
+  .pill-blue { background: #e8f0ff; color: #2a4a9a; }
+  .pill-red { background: #ffe8e8; color: #9a2a2a; }
+  .pill-gold { background: #fff8e0; color: #8a6010; }
+
+  /* SECTION LABEL */
+  .sec-label {
+    font-size: 10px; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 0.12em;
+    color: var(--text3); margin: 18px 0 8px;
+  }
+
+  /* TIMELINE */
+  .timeline-item {
+    display: flex; gap: 12px; margin-bottom: 8px; align-items: flex-start;
+  }
+  .time-badge {
+    min-width: 68px;
+    background: var(--surface2);
+    border-radius: 7px;
+    padding: 4px 8px;
+    font-size: 11px; font-weight: 600;
+    color: var(--accent);
+    text-align: center;
+    flex-shrink: 0;
+  }
+  .time-content { font-size: 12px; color: var(--text2); padding-top: 3px; }
+  .time-content strong { color: var(--text); font-weight: 600; }
+
+  /* WEEK CHART */
+  .week-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 6px;
+    margin-bottom: 16px;
+  }
+  .day-card {
+    background: var(--surface2);
+    border-radius: 10px;
+    padding: 8px 6px;
+    text-align: center;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: border-color .2s, background .2s;
+  }
+  .day-card.active { border-color: var(--accent); background: var(--surface); }
+  .day-card.sunday { background: linear-gradient(135deg, #e8f5ef, #f0fff5); }
+  .day-card.sunday.active { border-color: var(--accent2); }
+  .day-name { font-size: 10px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text3); margin-bottom: 3px; }
+  .day-emoji { font-size: 16px; line-height: 1; margin-bottom: 2px; }
+  .day-tag { font-size: 9px; color: var(--text3); }
+
+  .day-detail { display: none; }
+  .day-detail.active { display: block; }
+
+  /* WORKOUT */
+  .workout-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 8px;
+  }
+  .workout-item {
+    background: var(--surface2);
+    border-radius: 10px;
+    padding: 12px;
+  }
+  .workout-name { font-weight: 600; font-size: 12px; margin-bottom: 2px; }
+  .workout-meta { font-size: 11px; color: var(--text3); }
+
+  /* DIET TABLE */
+  .meal-row {
+    display: flex; align-items: flex-start; gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .meal-row:last-child { border-bottom: none; }
+  .meal-time { min-width: 70px; font-size: 11px; font-weight: 600; color: var(--accent); }
+  .meal-name { font-size: 12px; font-weight: 600; margin-bottom: 1px; }
+  .meal-desc { font-size: 11px; color: var(--text2); }
+
+  /* SMOKING METER */
+  .smoke-tracker {
+    background: var(--surface2);
+    border-radius: 12px;
+    padding: 14px;
+    margin-bottom: 12px;
+  }
+  .smoke-bar-bg {
+    height: 8px; background: var(--border);
+    border-radius: 4px; margin: 8px 0;
+    overflow: hidden;
+  }
+  .smoke-bar { height: 100%; border-radius: 4px; transition: width .4s; }
+
+  /* TIPS */
+  .tip-row {
+    display: flex; gap: 10px; align-items: flex-start;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .tip-row:last-child { border-bottom: none; }
+  .tip-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); flex-shrink: 0; margin-top: 6px; }
+  .tip-text { font-size: 12px; color: var(--text2); line-height: 1.5; }
+  .tip-text strong { color: var(--text); }
+
+  /* DRINK CARD */
+  .drink-card {
+    background: var(--surface2);
+    border-radius: 12px;
+    padding: 14px 16px;
+    margin-bottom: 10px;
+    display: flex; gap: 12px; align-items: flex-start;
+  }
+  .drink-icon { font-size: 22px; line-height: 1; flex-shrink: 0; margin-top: 2px; }
+  .drink-name { font-weight: 600; font-size: 13px; margin-bottom: 2px; }
+  .drink-desc { font-size: 11px; color: var(--text2); line-height: 1.5; }
+
+  .divider { height: 1px; background: var(--border); margin: 16px 0; }
+  
+  h2 { font-family: 'Playfair Display', serif; font-size: 18px; margin-bottom: 4px; }
+  h3 { font-size: 13px; font-weight: 600; margin-bottom: 8px; }
+</style>
+</head>
+<body>
+
+<div class="topnav">
+  <button class="nav-btn active" onclick="showSection('home')">Overview</button>
+  <button class="nav-btn" onclick="showSection('skin')">Skincare</button>
+  <button class="nav-btn" onclick="showSection('body')">Body & Diet</button>
+  <button class="nav-btn" onclick="showSection('detox')">Detox</button>
+  <button class="nav-btn" onclick="showSection('routine')">Daily Routine</button>
+  <button class="nav-btn" onclick="showSection('week')">Weekly Plan</button>
+  <button class="nav-btn" onclick="showSection('life')">Lifestyle</button>
+</div>
+
+<!-- HOME -->
+<div class="section active" id="home">
+  <div class="hero">
+    <div class="hero-label">Complete Self-Improvement Guide</div>
+    <h1>Your 90-Day Transformation Plan</h1>
+    <p>Tailored for a 24-year-old, 6ft male developer. Natural, practical, zero-gym.</p>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px;">
+    <div onclick="showSection('skin')" style="cursor:pointer;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px;text-align:center;">
+      <div style="font-size:28px;margin-bottom:6px;">✨</div>
+      <div style="font-weight:600;font-size:13px;">Skincare</div>
+      <div style="font-size:11px;color:var(--text3);margin-top:2px;">Homemade remedies</div>
+    </div>
+    <div onclick="showSection('body')" style="cursor:pointer;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px;text-align:center;">
+      <div style="font-size:28px;margin-bottom:6px;">💪</div>
+      <div style="font-weight:600;font-size:13px;">Body & Diet</div>
+      <div style="font-size:11px;color:var(--text3);margin-top:2px;">Fat loss + Indian meals</div>
+    </div>
+    <div onclick="showSection('detox')" style="cursor:pointer;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px;text-align:center;">
+      <div style="font-size:28px;margin-bottom:6px;">🌿</div>
+      <div style="font-weight:600;font-size:13px;">Detox</div>
+      <div style="font-size:11px;color:var(--text3);margin-top:2px;">Liver, gut, digestion</div>
+    </div>
+    <div onclick="showSection('routine')" style="cursor:pointer;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px;text-align:center;">
+      <div style="font-size:28px;margin-bottom:6px;">📋</div>
+      <div style="font-weight:600;font-size:13px;">Daily Routine</div>
+      <div style="font-size:11px;color:var(--text3);margin-top:2px;">Morning to night</div>
+    </div>
+    <div onclick="showSection('week')" style="cursor:pointer;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px;text-align:center;">
+      <div style="font-size:28px;margin-bottom:6px;">📅</div>
+      <div style="font-weight:600;font-size:13px;">Weekly Plan</div>
+      <div style="font-size:11px;color:var(--text3);margin-top:2px;">Mon–Sun chart</div>
+    </div>
+    <div onclick="showSection('life')" style="cursor:pointer;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px;text-align:center;">
+      <div style="font-size:28px;margin-bottom:6px;">🚭</div>
+      <div style="font-weight:600;font-size:13px;">Lifestyle Rules</div>
+      <div style="font-size:11px;color:var(--text3);margin-top:2px;">Quit smoking plan</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon" style="background:#fff8e0;font-size:18px;">⚡</div>
+      <div>
+        <div class="card-title">3 Golden Rules</div>
+        <div class="card-subtitle">Follow these every single day</div>
+      </div>
+    </div>
+    <div class="tip-row"><div class="tip-dot" style="background:var(--accent);"></div><div class="tip-text"><strong>No sugar</strong> — not in chai, not in biscuits, not hidden in "diet" foods.</div></div>
+    <div class="tip-row"><div class="tip-dot" style="background:var(--accent2);"></div><div class="tip-text"><strong>Drink 3–3.5L water daily</strong> — your screen time dries you out more than you think.</div></div>
+    <div class="tip-row"><div class="tip-dot" style="background:var(--accent3);"></div><div class="tip-text"><strong>Sleep 11 PM → 6 AM</strong> — your skin repairs and fat burns while you sleep.</div></div>
+  </div>
+</div>
+
+<!-- SKINCARE -->
+<div class="section" id="skin">
+  <div class="hero" style="background:linear-gradient(135deg, #c4793a, #8a5020);">
+    <div class="hero-label">Section 1</div>
+    <h1>Skin Care Routine</h1>
+    <p>All-natural. Fixes pigmentation, tanning, open pores & dark spots.</p>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon icon-skin">🌅</div>
+      <div>
+        <div class="card-title">Morning Routine (7:00–7:15 AM)</div>
+        <div class="card-subtitle">Daily • Takes 15 min</div>
+      </div>
+    </div>
+    <div class="step-row"><div class="step-num">1</div><div class="step-content"><strong>Cold water face wash</strong><p>Splash cold water 10–15 times. Tightens pores instantly. NO hot water on face — ever.</p></div></div>
+    <div class="step-row"><div class="step-num">2</div><div class="step-content"><strong>Ice Therapy (Ice Globe / Ice Cube)</strong><p>Wrap 1–2 ice cubes in a thin cloth. Gently glide in circular motions over cheeks, forehead, jaw for 3–5 min. Reduces pores, puffiness, and brightens tone.</p></div></div>
+    <div class="step-row"><div class="step-num">3</div><div class="step-content"><strong>Raw Aloe Vera Gel</strong><p>Apply a thin layer of pure aloe gel (from plant or store). Leave it on. Works as a natural moisturiser + pigmentation fighter.</p></div></div>
+    <div class="step-row"><div class="step-num">4</div><div class="step-content"><strong>Sunscreen (natural option)</strong><p>Apply coconut oil + a pinch of turmeric (tiny amount). Or use aloe vera as a light SPF barrier if stepping out briefly.</p></div></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon icon-skin">🌙</div>
+      <div>
+        <div class="card-title">Night Routine (10:00–10:15 PM)</div>
+        <div class="card-subtitle">Daily • Repair while you sleep</div>
+      </div>
+    </div>
+    <div class="step-row"><div class="step-num">1</div><div class="step-content"><strong>Raw milk cleanse</strong><p>Dip a cotton ball in cold raw milk. Wipe entire face. Removes pollution, dead skin, and unclogs pores. Wait 2 min, rinse.</p></div></div>
+    <div class="step-row"><div class="step-num">2</div><div class="step-content"><strong>Potato juice toner</strong><p>Grate a small potato, squeeze juice. Apply with cotton on dark spots and pigmented areas. Leave 10 min. Rinse. Best natural de-pigmentation agent.</p></div></div>
+    <div class="step-row"><div class="step-num">3</div><div class="step-content"><strong>Overnight oil treatment</strong><p>1–2 drops of pure castor oil + 3 drops almond oil. Mix in palm. Apply lightly over face. Rich in Vitamin E. Wake up with soft skin.</p></div></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon icon-skin">🧪</div>
+      <div>
+        <div class="card-title">Weekly Face Pack (Sun & Wed)</div>
+        <div class="card-subtitle">2× per week • Leave 20 min</div>
+      </div>
+    </div>
+    <div class="sec-label">Glow Pack – For Pigmentation & Tanning</div>
+    <div class="step-row"><div class="step-num">1</div><div class="step-content"><strong>Ingredients</strong><p>2 tsp besan (gram flour) + ½ tsp turmeric + 1 tsp curd + 1 tsp lemon juice + few drops of rose water. Mix into smooth paste.</p></div></div>
+    <div class="step-row"><div class="step-num">2</div><div class="step-content"><strong>Apply & wait</strong><p>Apply evenly on face and neck. Leave 20–25 min till it dries. Rinse with cold water in circular motions.</p></div></div>
+    <div class="step-row"><div class="step-num">3</div><div class="step-content"><strong>Alternate Pack – Tan Removal</strong><p>Tomato pulp + cucumber juice + 1 tsp honey. Apply. 20 min. Rinse. Great for suntan and uneven tone.</p></div></div>
+    <div class="divider"></div>
+    <div class="sec-label">Scrub (Every Saturday) – Open Pores</div>
+    <div class="step-row"><div class="step-num">1</div><div class="step-content"><strong>Coffee + honey scrub</strong><p>1 tsp used coffee grounds + 1 tsp raw honey + few drops of coconut oil. Gently scrub in circles for 2 min. Rinse. Clears dead cells, opens pores, brightens.</p></div></div>
+    <div class="step-row"><div class="step-num">2</div><div class="step-content"><strong>Sugar + lemon scrub (alternate week)</strong><p>1 tsp raw sugar + ½ tsp lemon juice + 1 tsp olive oil. Gentle circular scrub. Bleaches dark spots naturally.</p></div></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon icon-skin">❄️</div>
+      <div>
+        <div class="card-title">Ice Therapy – Daily Protocol</div>
+        <div class="card-subtitle">Morning must-do • 5 min</div>
+      </div>
+    </div>
+    <div class="tip-row"><div class="tip-dot"></div><div class="tip-text"><strong>Never apply ice directly.</strong> Always wrap in a thin muslin cloth or cotton.</div></div>
+    <div class="tip-row"><div class="tip-dot"></div><div class="tip-text"><strong>Motion:</strong> Gentle circles starting from chin → cheeks → nose sides → forehead → temples.</div></div>
+    <div class="tip-row"><div class="tip-dot"></div><div class="tip-text"><strong>Frequency:</strong> Every morning. Optional: after gym/exercise to reduce sweat-pores.</div></div>
+    <div class="tip-row"><div class="tip-dot"></div><div class="tip-text"><strong>Power-up:</strong> Freeze green tea or rose water as ice cubes for added skin benefits.</div></div>
+    <div class="tip-row"><div class="tip-dot"></div><div class="tip-text"><strong>Results visible in:</strong> 3–4 weeks of consistent use. Pores visibly tighter by week 2.</div></div>
+  </div>
+
+  <div class="card">
+    <div style="font-weight:600;margin-bottom:10px;">Foods That Heal Your Skin from Inside</div>
+    <div style="display:flex;flex-wrap:wrap;gap:4px;">
+      <span class="pill pill-skin">Amla daily</span>
+      <span class="pill pill-skin">Raw turmeric in warm water</span>
+      <span class="pill pill-skin">Cucumber slices</span>
+      <span class="pill pill-skin">Tomatoes</span>
+      <span class="pill pill-skin">Papaya</span>
+      <span class="pill pill-skin">Carrot juice</span>
+      <span class="pill pill-skin">Coconut water</span>
+      <span class="pill pill-skin">Methi seeds (soaked)</span>
+    </div>
+  </div>
+</div>
+
+<!-- BODY & DIET -->
+<div class="section" id="body">
+  <div class="hero" style="background:linear-gradient(135deg, #3a7a5c, #25503c);">
+    <div class="hero-label">Section 2</div>
+    <h1>Body & Diet Plan</h1>
+    <p>Burn belly fat, build a lean frame. No gym. Pure Indian food. Zero sugar.</p>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon icon-body">🏠</div>
+      <div>
+        <div class="card-title">Home Workout Plan</div>
+        <div class="card-subtitle">30 min • 5 days/week • Targets belly fat</div>
+      </div>
+    </div>
+    <div class="sec-label">Warm-Up (5 min)</div>
+    <div class="workout-grid">
+      <div class="workout-item"><div class="workout-name">Neck rotations</div><div class="workout-meta">30 sec each side</div></div>
+      <div class="workout-item"><div class="workout-name">Shoulder rolls</div><div class="workout-meta">20 reps</div></div>
+      <div class="workout-item"><div class="workout-name">Jumping jacks</div><div class="workout-meta">1 min</div></div>
+      <div class="workout-item"><div class="workout-name">Hip circles</div><div class="workout-meta">30 sec each</div></div>
+    </div>
+    <div class="sec-label" style="margin-top:14px;">Core & Fat Burn (20 min)</div>
+    <div class="workout-grid">
+      <div class="workout-item"><div class="workout-name">Plank</div><div class="workout-meta">3 sets × 45 sec</div></div>
+      <div class="workout-item"><div class="workout-name">Crunches</div><div class="workout-meta">3 × 20 reps</div></div>
+      <div class="workout-item"><div class="workout-name">Mountain climbers</div><div class="workout-meta">3 × 30 sec</div></div>
+      <div class="workout-item"><div class="workout-name">Bicycle crunches</div><div class="workout-meta">3 × 20 reps</div></div>
+      <div class="workout-item"><div class="workout-name">Leg raises</div><div class="workout-meta">3 × 15 reps</div></div>
+      <div class="workout-item"><div class="workout-name">Burpees</div><div class="workout-meta">3 × 10 reps</div></div>
+      <div class="workout-item"><div class="workout-name">Squat jumps</div><div class="workout-meta">3 × 15 reps</div></div>
+      <div class="workout-item"><div class="workout-name">Push-ups</div><div class="workout-meta">3 × 15–20 reps</div></div>
+    </div>
+    <div class="sec-label" style="margin-top:14px;">Cooldown (5 min)</div>
+    <div class="tip-row"><div class="tip-dot" style="background:var(--accent2);"></div><div class="tip-text">Child's pose → seated forward fold → spinal twist. Hold each 30 sec.</div></div>
+    <div class="divider"></div>
+    <div class="sec-label">Belly Fat Special: Morning Walk</div>
+    <div class="tip-row"><div class="tip-dot" style="background:var(--accent2);"></div><div class="tip-text"><strong>30-min brisk walk every morning</strong> on an empty stomach. This burns fat directly — most effective for thoppai.</div></div>
+    <div class="tip-row"><div class="tip-dot" style="background:var(--accent2);"></div><div class="tip-text">If no walk possible: 15 min skipping rope = equivalent fat burn.</div></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon icon-body">🍛</div>
+      <div>
+        <div class="card-title">Indian Diet Plan (No Sugar)</div>
+        <div class="card-subtitle">Clean, affordable, effective</div>
+      </div>
+    </div>
+    <div class="meal-row">
+      <div class="meal-time">5:30 AM</div>
+      <div><div class="meal-name">Wake-up drink</div><div class="meal-desc">Warm water + ½ lemon + ½ tsp jeera powder. Kickstarts digestion.</div></div>
+    </div>
+    <div class="meal-row">
+      <div class="meal-time">7:30 AM</div>
+      <div><div class="meal-name">Breakfast (Post-workout)</div><div class="meal-desc">3 egg whites + 1 whole egg scrambled, OR 2 idlis + sambar, OR ragi porridge (no sugar). 1 cup black coffee (no sugar).</div></div>
+    </div>
+    <div class="meal-row">
+      <div class="meal-time">10:30 AM</div>
+      <div><div class="meal-name">Mid-morning snack</div><div class="meal-desc">1 banana + handful of roasted groundnuts, OR 1 apple + 5 almonds soaked overnight.</div></div>
+    </div>
+    <div class="meal-row">
+      <div class="meal-time">1:00 PM</div>
+      <div><div class="meal-name">Lunch (Biggest meal)</div><div class="meal-desc">2 rotis (wheat/millet) + 1 bowl dal + sabzi + 1 cup curd. OR brown rice + rajma/chana curry + salad. No maida.</div></div>
+    </div>
+    <div class="meal-row">
+      <div class="meal-time">4:00 PM</div>
+      <div><div class="meal-name">Evening snack</div><div class="meal-desc">Green tea (no sugar) + handful of makhana (fox nuts) OR boiled chana chat.</div></div>
+    </div>
+    <div class="meal-row">
+      <div class="meal-time">7:30 PM</div>
+      <div><div class="meal-name">Dinner (Light)</div><div class="meal-desc">1–2 rotis + dal/sabzi OR khichdi + curd. Avoid rice at night. Finish by 8 PM sharp.</div></div>
+    </div>
+    <div class="meal-row">
+      <div class="meal-time">9:30 PM</div>
+      <div><div class="meal-name">Night drink</div><div class="meal-desc">Warm turmeric milk (haldi doodh) — no sugar. OR jeera water. Promotes deep sleep and fat burn.</div></div>
+    </div>
+    <div class="divider"></div>
+    <div class="sec-label">Foods to Completely Avoid</div>
+    <div style="display:flex;flex-wrap:wrap;gap:4px;">
+      <span class="pill pill-red">Sugar</span>
+      <span class="pill pill-red">Maida / white bread</span>
+      <span class="pill pill-red">Packaged biscuits</span>
+      <span class="pill pill-red">Soft drinks</span>
+      <span class="pill pill-red">Fruit juices (bottled)</span>
+      <span class="pill pill-red">Fried snacks</span>
+      <span class="pill pill-red">Ice cream</span>
+      <span class="pill pill-red">Chips</span>
+    </div>
+  </div>
+</div>
+
+<!-- DETOX -->
+<div class="section" id="detox">
+  <div class="hero" style="background:linear-gradient(135deg, #5a4a7c, #3a2a5c);">
+    <div class="hero-label">Section 3</div>
+    <h1>Internal Detox Plan</h1>
+    <p>Clean your liver, gut, and digestion — naturally from inside out.</p>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon icon-detox">☀️</div>
+      <div>
+        <div class="card-title">Morning Detox Drinks</div>
+        <div class="card-subtitle">Drink on empty stomach</div>
+      </div>
+    </div>
+    <div class="drink-card">
+      <div class="drink-icon">🍋</div>
+      <div><div class="drink-name">Lemon + Warm Water + Honey (Mon, Wed, Fri)</div><div class="drink-desc">1 glass warm water + juice of ½ lemon + 1 tsp raw honey. Alkalises body, flushes toxins, boosts metabolism. Drink immediately after waking.</div></div>
+    </div>
+    <div class="drink-card">
+      <div class="drink-icon">🫚</div>
+      <div><div class="drink-name">Jeera + Ajwain Water (Tue, Thu, Sat)</div><div class="drink-desc">Boil 1 tsp jeera + ½ tsp ajwain in 2 cups water for 5 min. Strain, drink warm. Powerful gut cleanser. Fixes bloating and poor digestion.</div></div>
+    </div>
+    <div class="drink-card">
+      <div class="drink-icon">🌿</div>
+      <div><div class="drink-name">Coriander Seed Water (Sunday)</div><div class="drink-desc">Soak 2 tsp coriander seeds in 1 glass water overnight. Drink in the morning. Cleanses liver, improves kidney function, reduces inflammation.</div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon icon-detox">🌙</div>
+      <div>
+        <div class="card-title">Night Detox Drinks</div>
+        <div class="card-subtitle">30 min before sleep</div>
+      </div>
+    </div>
+    <div class="drink-card">
+      <div class="drink-icon">🟡</div>
+      <div><div class="drink-name">Golden Milk (Haldi Doodh)</div><div class="drink-desc">1 cup warm milk + ¼ tsp turmeric + pinch of black pepper + pinch of cinnamon. No sugar. Anti-inflammatory, liver protective, promotes deep sleep.</div></div>
+    </div>
+    <div class="drink-card">
+      <div class="drink-icon">🍵</div>
+      <div><div class="drink-name">Triphala Water</div><div class="drink-desc">½ tsp Triphala powder in warm water. The best Ayurvedic gut cleanser. Clears intestines, removes toxin buildup, improves bowel health. 3–4 nights/week.</div></div>
+    </div>
+    <div class="drink-card">
+      <div class="drink-icon">🫚</div>
+      <div><div class="drink-name">Fennel (Saunf) Tea</div><div class="drink-desc">1 tsp saunf in hot water, steep 5 min, strain. Relieves gas, supports gut bacteria, improves digestion. Use on remaining nights.</div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon icon-detox">📅</div>
+      <div>
+        <div class="card-title">Weekly Detox Rituals</div>
+        <div class="card-subtitle">Sunday full cleanse</div>
+      </div>
+    </div>
+    <div class="step-row"><div class="step-num purple">1</div><div class="step-content"><strong>Oil Pulling (Sunday morning)</strong><p>1 tbsp cold-pressed coconut oil. Swish in mouth for 10–15 min on empty stomach. Spit out (NOT swallow). Removes oral bacteria, detoxes via oral mucosa, improves gum health.</p></div></div>
+    <div class="step-row"><div class="step-num purple">2</div><div class="step-content"><strong>Amla juice fast (Sunday morning)</strong><p>3 tbsp raw amla juice + water. Highest natural Vitamin C. Flushes liver. Reverses pigmentation from inside.</p></div></div>
+    <div class="step-row"><div class="step-num purple">3</div><div class="step-content"><strong>Dry brushing (Sunday)</strong><p>Use a dry soft brush on body before bath. Circular motions toward heart. Removes dead skin, boosts lymphatic drainage, improves circulation.</p></div></div>
+    <div class="step-row"><div class="step-num purple">4</div><div class="step-content"><strong>Steam face (Sunday)</strong><p>Boil water + few tulsi/mint leaves. Bend over bowl with towel over head. Steam face 10 min. Deeply unclogs pores. Do before face pack.</p></div></div>
+  </div>
+</div>
+
+<!-- DAILY ROUTINE -->
+<div class="section" id="routine">
+  <div class="hero" style="background:linear-gradient(135deg, #c4a83a, #8a7020);">
+    <div class="hero-label">Section 4</div>
+    <h1>Structured Daily Routine</h1>
+    <p>Weekday schedule. Discipline builds the body. The body rewards the mind.</p>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon icon-routine">🌅</div>
+      <div>
+        <div class="card-title">Morning Block (5:30–9:00 AM)</div>
+        <div class="card-subtitle">The most important 3.5 hours</div>
+      </div>
+    </div>
+    <div class="timeline-item"><div class="time-badge">5:30 AM</div><div class="time-content"><strong>Wake up.</strong> No phone. Drink 1 glass water immediately.</div></div>
+    <div class="timeline-item"><div class="time-badge">5:35 AM</div><div class="time-content"><strong>Morning detox drink</strong> (rotate daily as per detox plan). 10 min.</div></div>
+    <div class="timeline-item"><div class="time-badge">5:45 AM</div><div class="time-content"><strong>Brisk walk or skipping rope</strong> — 30 min. Empty stomach. Core fat burn window.</div></div>
+    <div class="timeline-item"><div class="time-badge">6:15 AM</div><div class="time-content"><strong>Home workout</strong> — 30 min. Core + full body (see body section).</div></div>
+    <div class="timeline-item"><div class="time-badge">6:45 AM</div><div class="time-content"><strong>Cold shower</strong> — 5 min. Boosts testosterone, circulation, alertness.</div></div>
+    <div class="timeline-item"><div class="time-badge">7:00 AM</div><div class="time-content"><strong>Skincare routine</strong> — Face wash → Ice therapy → Aloe gel. 15 min.</div></div>
+    <div class="timeline-item"><div class="time-badge">7:15 AM</div><div class="time-content"><strong>Breakfast</strong> — High protein. No rush. Eat sitting down.</div></div>
+    <div class="timeline-item"><div class="time-badge">8:00 AM</div><div class="time-content"><strong>Prep for work</strong> — Ready, focused, phone notifications on silent.</div></div>
+    <div class="timeline-item"><div class="time-badge">9:00 AM</div><div class="time-content"><strong>Work begins.</strong></div></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon icon-routine">💻</div>
+      <div>
+        <div class="card-title">Work Block (9:00 AM–6:30 PM)</div>
+        <div class="card-subtitle">Protect your posture & eyes</div>
+      </div>
+    </div>
+    <div class="timeline-item"><div class="time-badge">9:00 AM</div><div class="time-content"><strong>Deep work begins.</strong> Most productive window. Hard coding tasks first.</div></div>
+    <div class="timeline-item"><div class="time-badge">10:30 AM</div><div class="time-content"><strong>Snack break</strong> — 10 min. Nuts, fruit. Stand up. Walk a bit.</div></div>
+    <div class="timeline-item"><div class="time-badge">1:00 PM</div><div class="time-content"><strong>Lunch</strong> — Step away from screen. Eat slowly. 30 min break.</div></div>
+    <div class="timeline-item"><div class="time-badge">1:30 PM</div><div class="time-content"><strong>10-min walk</strong> after lunch. Non-negotiable. Prevents belly fat accumulation post-meal.</div></div>
+    <div class="timeline-item"><div class="time-badge">4:00 PM</div><div class="time-content"><strong>Evening snack</strong> — Green tea + makhana.</div></div>
+    <div class="timeline-item"><div class="time-badge">6:30 PM</div><div class="time-content"><strong>Work ends.</strong> Log off. Separate work from personal time.</div></div>
+    <div class="tip-row" style="margin-top:12px;"><div class="tip-dot" style="background:var(--gold);"></div><div class="tip-text"><strong>20-20-20 rule:</strong> Every 20 min of screen time → look 20 feet away for 20 seconds. Prevents eye strain.</div></div>
+    <div class="tip-row"><div class="tip-dot" style="background:var(--gold);"></div><div class="tip-text"><strong>Posture check every hour:</strong> Shoulders back, screen at eye level, feet flat. Sedentary life kills posture.</div></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon icon-routine">🌆</div>
+      <div>
+        <div class="card-title">Evening & Night Block (6:30–11 PM)</div>
+        <div class="card-subtitle">Recovery, food, rest</div>
+      </div>
+    </div>
+    <div class="timeline-item"><div class="time-badge">6:30 PM</div><div class="time-content"><strong>Personal time</strong> — Read, call family, light stretching. No screens for 30 min.</div></div>
+    <div class="timeline-item"><div class="time-badge">7:30 PM</div><div class="time-content"><strong>Dinner</strong> — Light meal. Finish eating before 8 PM.</div></div>
+    <div class="timeline-item"><div class="time-badge">8:00 PM</div><div class="time-content"><strong>Leisure</strong> — Watch something, hobby, reading. Limit scrolling.</div></div>
+    <div class="timeline-item"><div class="time-badge">9:30 PM</div><div class="time-content"><strong>Night skincare</strong> — Milk cleanse → Potato juice → Overnight oil. 15 min.</div></div>
+    <div class="timeline-item"><div class="time-badge">9:45 PM</div><div class="time-content"><strong>Night detox drink</strong> — Haldi doodh or Triphala water.</div></div>
+    <div class="timeline-item"><div class="time-badge">10:00 PM</div><div class="time-content"><strong>Wind down</strong> — No phone. Dim lights. Calm music or silence.</div></div>
+    <div class="timeline-item"><div class="time-badge">11:00 PM</div><div class="time-content"><strong>Sleep.</strong> 7 hours minimum. This is when skin repairs and fat burns.</div></div>
+  </div>
+</div>
+
+<!-- WEEK -->
+<div class="section" id="week">
+  <div class="hero" style="background:linear-gradient(135deg, #5a4a7c, #3a2a5c);">
+    <div class="hero-label">Section 5</div>
+    <h1>Weekly Plan</h1>
+    <p>Tap each day to see the full routine. Sunday = full reset day.</p>
+  </div>
+
+  <div class="week-grid">
+    <div class="day-card active" onclick="showDay('mon')"><div class="day-emoji">💪</div><div class="day-name">Mon</div><div class="day-tag">Core</div></div>
+    <div class="day-card" onclick="showDay('tue')"><div class="day-emoji">🏃</div><div class="day-name">Tue</div><div class="day-tag">Cardio</div></div>
+    <div class="day-card" onclick="showDay('wed')"><div class="day-emoji">🧘</div><div class="day-name">Wed</div><div class="day-tag">Stretch</div></div>
+    <div class="day-card" onclick="showDay('thu')"><div class="day-emoji">🔥</div><div class="day-name">Thu</div><div class="day-tag">HIIT</div></div>
+    <div class="day-card" onclick="showDay('fri')"><div class="day-emoji">💪</div><div class="day-name">Fri</div><div class="day-tag">Full body</div></div>
+    <div class="day-card" onclick="showDay('sat')"><div class="day-emoji">⚡</div><div class="day-name">Sat</div><div class="day-tag">Light</div></div>
+    <div class="day-card sunday" onclick="showDay('sun')"><div class="day-emoji">🌿</div><div class="day-name">Sun</div><div class="day-tag">Reset</div></div>
+  </div>
+
+  <div class="day-detail active" id="day-mon">
+    <div class="card">
+      <div class="card-header"><div class="card-icon icon-body">💪</div><div><div class="card-title">Monday — Core Focus</div><div class="card-subtitle">Detox: Lemon water • Skincare: AM + PM routine</div></div></div>
+      <div class="step-row"><div class="step-num">AM</div><div class="step-content"><strong>5:30 Wake → Lemon water → 30 min walk → Core workout</strong><p>Plank 3×45s · Crunches 3×20 · Leg raises 3×15 · Mountain climbers 3×30s · Bicycle crunches 3×20</p></div></div>
+      <div class="step-row"><div class="step-num">SK</div><div class="step-content"><strong>Morning skin: Ice therapy + Aloe vera</strong><p>Evening: Raw milk cleanse + Potato juice toner</p></div></div>
+      <div class="step-row"><div class="step-num">🍛</div><div class="step-content"><strong>Diet: High protein breakfast, balanced lunch, light dinner</strong><p>Night: Haldi doodh before sleep</p></div></div>
+    </div>
+  </div>
+
+  <div class="day-detail" id="day-tue">
+    <div class="card">
+      <div class="card-header"><div class="card-icon icon-body">🏃</div><div><div class="card-title">Tuesday — Cardio Day</div><div class="card-subtitle">Detox: Jeera-Ajwain water • Face pack day</div></div></div>
+      <div class="step-row"><div class="step-num">AM</div><div class="step-content"><strong>5:30 Wake → Jeera water → 30 min brisk walk / jogging intervals</strong><p>Push-ups 4×15 · Squat jumps 3×15 · Burpees 3×10 · Skipping 5 min</p></div></div>
+      <div class="step-row"><div class="step-num">SK</div><div class="step-content"><strong>Ice therapy AM + Glow Face Pack (Besan + Turmeric + Curd)</strong><p>Leave 20 min. Night: Castor + Almond oil overnight</p></div></div>
+      <div class="step-row"><div class="step-num">🍛</div><div class="step-content"><strong>Diet: Egg white breakfast, rajma-rice lunch, dal-roti dinner</strong><p>Night: Triphala water</p></div></div>
+    </div>
+  </div>
+
+  <div class="day-detail" id="day-wed">
+    <div class="card">
+      <div class="card-header"><div class="card-icon icon-body">🧘</div><div><div class="card-title">Wednesday — Stretch & Recovery</div><div class="card-subtitle">Detox: Lemon water • Face pack day</div></div></div>
+      <div class="step-row"><div class="step-num">AM</div><div class="step-content"><strong>5:30 Wake → Lemon water → 20 min yoga/stretching</strong><p>Surya Namaskar 5 rounds · Child's pose · Downward dog · Cat-cow · Seated twists. No high-intensity today.</p></div></div>
+      <div class="step-row"><div class="step-num">SK</div><div class="step-content"><strong>Ice therapy AM + Glow pack (Tomato + Cucumber + Honey)</strong><p>Night: Potato juice toner + Overnight oil</p></div></div>
+      <div class="step-row"><div class="step-num">🍛</div><div class="step-content"><strong>Light diet today: Idli-sambar, khichdi, curd</strong><p>Night: Fennel (saunf) tea</p></div></div>
+    </div>
+  </div>
+
+  <div class="day-detail" id="day-thu">
+    <div class="card">
+      <div class="card-header"><div class="card-icon icon-body">🔥</div><div><div class="card-title">Thursday — HIIT Day</div><div class="card-subtitle">Detox: Jeera-Ajwain water • Maximum burn day</div></div></div>
+      <div class="step-row"><div class="step-num">AM</div><div class="step-content"><strong>5:30 Wake → Jeera water → Full HIIT circuit (30 min)</strong><p>20s work / 10s rest: Burpees · Jump squats · Push-ups · Mountain climbers · Plank taps. 4 rounds total.</p></div></div>
+      <div class="step-row"><div class="step-num">SK</div><div class="step-content"><strong>Ice therapy + Aloe vera</strong><p>Night: Milk cleanse + Potato juice</p></div></div>
+      <div class="step-row"><div class="step-num">🍛</div><div class="step-content"><strong>Increase protein today: 4 eggs, more dal, add paneer if possible</strong><p>Night: Triphala water</p></div></div>
+    </div>
+  </div>
+
+  <div class="day-detail" id="day-fri">
+    <div class="card">
+      <div class="card-header"><div class="card-icon icon-body">💪</div><div><div class="card-title">Friday — Full Body</div><div class="card-subtitle">Detox: Lemon water • Prep for week reset</div></div></div>
+      <div class="step-row"><div class="step-num">AM</div><div class="step-content"><strong>5:30 Wake → Full body workout (30 min)</strong><p>Push-ups · Squats · Lunges · Plank · Crunches · Dips (using chair). 3 sets each.</p></div></div>
+      <div class="step-row"><div class="step-num">SK</div><div class="step-content"><strong>Ice therapy + Aloe</strong><p>Night: Oil overnight treatment</p></div></div>
+      <div class="step-row"><div class="step-num">🍛</div><div class="step-content"><strong>Normal weekday diet. Stay hydrated.</strong><p>Night: Haldi doodh</p></div></div>
+    </div>
+  </div>
+
+  <div class="day-detail" id="day-sat">
+    <div class="card">
+      <div class="card-header"><div class="card-icon icon-body">⚡</div><div><div class="card-title">Saturday — Light Day (Working)</div><div class="card-subtitle">Detox: Jeera water • Scrub day</div></div></div>
+      <div class="step-row"><div class="step-num">AM</div><div class="step-content"><strong>6:00 Wake (slight rest) → Jeera water → 20 min walk only</strong><p>No intense workout today. Let body recover. Focus on work.</p></div></div>
+      <div class="step-row"><div class="step-num">SK</div><div class="step-content"><strong>Coffee + Honey scrub (10 min) → Ice therapy → Aloe</strong><p>Weekly scrub day. Remove dead skin, clear pores.</p></div></div>
+      <div class="step-row"><div class="step-num">🍛</div><div class="step-content"><strong>Balanced meals. Treat yourself to a good lunch (no sugar though)</strong><p>Night: Fennel tea</p></div></div>
+    </div>
+  </div>
+
+  <div class="day-detail" id="day-sun">
+    <div class="card">
+      <div class="card-header"><div class="card-icon" style="background:#e8f5ef;font-size:18px;">🌿</div><div><div class="card-title">Sunday — Full Reset Day</div><div class="card-subtitle">Self-care + recovery + deep cleanse</div></div></div>
+      <div class="step-row"><div class="step-num green">1</div><div class="step-content"><strong>7:00 AM — Oil pulling + Amla juice</strong><p>Coconut oil pulling 15 min on empty stomach. Then amla juice + water.</p></div></div>
+      <div class="step-row"><div class="step-num green">2</div><div class="step-content"><strong>7:30 AM — Light yoga (45 min)</strong><p>Surya Namaskar + full stretching. No cardio today.</p></div></div>
+      <div class="step-row"><div class="step-num green">3</div><div class="step-content"><strong>9:00 AM — Dry brushing + hot bath</strong><p>Brush body → Hot shower → Cold rinse finish. Full body circulation boost.</p></div></div>
+      <div class="step-row"><div class="step-num green">4</div><div class="step-content"><strong>10:00 AM — Face steam + Full face pack</strong><p>Steam 10 min → Glow pack 25 min → Scrub gently → Ice therapy.</p></div></div>
+      <div class="step-row"><div class="step-num green">5</div><div class="step-content"><strong>11:00 AM — Hair oil massage</strong><p>Coconut/castor oil. Massage scalp 20 min. Leave 1–2 hours. Wash with mild shampoo.</p></div></div>
+      <div class="step-row"><div class="step-num green">6</div><div class="step-content"><strong>Afternoon — Rest, meal prep for week</strong><p>Coriander seed water. Light lunch. Prepare your meals and plan next week.</p></div></div>
+      <div class="step-row"><div class="step-num green">7</div><div class="step-content"><strong>9:00 PM — Sleep early</strong><p>Target 9:30–10 PM sleep. Longest sleep of the week. Maximum recovery.</p></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- LIFESTYLE -->
+<div class="section" id="life">
+  <div class="hero" style="background:linear-gradient(135deg, #7a3a3a, #5c2020);">
+    <div class="hero-label">Section 6</div>
+    <h1>Lifestyle Rules</h1>
+    <p>Energy, focus, quitting smoking — step by step.</p>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon icon-life">🚭</div>
+      <div>
+        <div class="card-title">Quit Smoking — 8-Week Plan</div>
+        <div class="card-subtitle">Step by step. Realistic. No cold turkey shock.</div>
+      </div>
+    </div>
+    <div class="smoke-tracker">
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <div><strong style="font-size:13px;">Week 1–2: Awareness</strong></div>
+        <span class="pill pill-gold">Start here</span>
+      </div>
+      <div class="smoke-bar-bg"><div class="smoke-bar" style="width:100%;background:#d4a84b;"></div></div>
+      <div style="font-size:12px;color:var(--text2);">Track every cigarette. Count how many daily. Write the time and trigger. Don't cut yet — just become aware. Replace 1 cigarette per day with a walk.</div>
+    </div>
+    <div class="smoke-tracker">
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <div><strong style="font-size:13px;">Week 3–4: Reduce by 40%</strong></div>
+        <span class="pill pill-skin">Cutting</span>
+      </div>
+      <div class="smoke-bar-bg"><div class="smoke-bar" style="width:60%;background:#c4793a;"></div></div>
+      <div style="font-size:12px;color:var(--text2);">If you smoke 10/day → bring to 6. Delay first cigarette by 1 hour after waking. Chew saunf or cardamom instead. Drink cold water when craving hits.</div>
+    </div>
+    <div class="smoke-tracker">
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <div><strong style="font-size:13px;">Week 5–6: Reduce by 70%</strong></div>
+        <span class="pill pill-green">Almost there</span>
+      </div>
+      <div class="smoke-bar-bg"><div class="smoke-bar" style="width:30%;background:#3a7a5c;"></div></div>
+      <div style="font-size:12px;color:var(--text2);">Max 3 per day. No smoking indoors or near workspace. Identify your 3 biggest triggers. Replace each with a substitute habit (gum, cold water, 5 push-ups).</div>
+    </div>
+    <div class="smoke-tracker">
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <div><strong style="font-size:13px;">Week 7–8: Quit</strong></div>
+        <span class="pill pill-green">Freedom</span>
+      </div>
+      <div class="smoke-bar-bg"><div class="smoke-bar" style="width:5%;background:#25503c;"></div></div>
+      <div style="font-size:12px;color:var(--text2);">Max 1/day → then 0. When craving hits: drink water → do 10 push-ups → walk 5 min. Craving lasts only 3–5 min. Outlast it.</div>
+    </div>
+    <div class="divider"></div>
+    <div class="sec-label">Natural Smoking Craving Killers</div>
+    <div style="display:flex;flex-wrap:wrap;gap:4px;">
+      <span class="pill pill-green">Cardamom (elaichi)</span>
+      <span class="pill pill-green">Saunf (fennel)</span>
+      <span class="pill pill-green">Cold water</span>
+      <span class="pill pill-green">Mulethi (licorice)</span>
+      <span class="pill pill-green">Ginger tea</span>
+      <span class="pill pill-green">5 deep breaths</span>
+      <span class="pill pill-green">10 push-ups</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon icon-life">⚡</div>
+      <div>
+        <div class="card-title">Energy & Focus Rules (Developer Life)</div>
+        <div class="card-subtitle">Sustainably sharp without caffeine dependency</div>
+      </div>
+    </div>
+    <div class="tip-row"><div class="tip-dot" style="background:var(--accent2);"></div><div class="tip-text"><strong>No chai/coffee before 9 AM.</strong> Let cortisol peak naturally first. First drink = water or lemon water.</div></div>
+    <div class="tip-row"><div class="tip-dot" style="background:var(--accent2);"></div><div class="tip-text"><strong>Max 2 cups black coffee per day.</strong> No chai — hidden sugar destroys energy cycles.</div></div>
+    <div class="tip-row"><div class="tip-dot" style="background:var(--accent2);"></div><div class="tip-text"><strong>Stand up every 45 min.</strong> Set a timer. 2-min walk breaks restore focus better than coffee.</div></div>
+    <div class="tip-row"><div class="tip-dot" style="background:var(--accent2);"></div><div class="tip-text"><strong>Soak 5 almonds + 2 walnuts overnight.</strong> Eat at breakfast. Brain fuel for coding sessions.</div></div>
+    <div class="tip-row"><div class="tip-dot" style="background:var(--accent2);"></div><div class="tip-text"><strong>3 PM energy crash cure:</strong> Cold water on face + 20 jumping jacks. Never another coffee after 3 PM.</div></div>
+    <div class="tip-row"><div class="tip-dot" style="background:var(--accent2);"></div><div class="tip-text"><strong>Phone in another room during work blocks.</strong> Every notification resets 23 min of focus.</div></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon icon-life">📋</div>
+      <div>
+        <div class="card-title">Daily Consistency Rules</div>
+        <div class="card-subtitle">The non-negotiables</div>
+      </div>
+    </div>
+    <div class="tip-row"><div class="tip-dot" style="background:var(--accent3);"></div><div class="tip-text"><strong>Zero sugar — always.</strong> Not "mostly." Check biscuit ingredients. Sugar is hiding in everything.</div></div>
+    <div class="tip-row"><div class="tip-dot" style="background:var(--accent3);"></div><div class="tip-text"><strong>3L+ water daily.</strong> Keep a 1L bottle visible on your desk. Refill 3× a day.</div></div>
+    <div class="tip-row"><div class="tip-dot" style="background:var(--accent3);"></div><div class="tip-text"><strong>Sleep before 11 PM.</strong> Results depend more on sleep than on workouts.</div></div>
+    <div class="tip-row"><div class="tip-dot" style="background:var(--accent3);"></div><div class="tip-text"><strong>10-min post-lunch walk.</strong> This one habit alone reduces belly fat accumulation significantly.</div></div>
+    <div class="tip-row"><div class="tip-dot" style="background:var(--accent3);"></div><div class="tip-text"><strong>Finish dinner by 8 PM.</strong> Late eating = fat storage. No exceptions.</div></div>
+    <div class="tip-row"><div class="tip-dot" style="background:var(--accent3);"></div><div class="tip-text"><strong>Track weeks, not days.</strong> Miss a day → get back on track next morning. Never skip 2 days in a row.</div></div>
+  </div>
+</div>
+
+<script>
+function showSection(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  const btns = document.querySelectorAll('.nav-btn');
+  const map = ['home','skin','body','detox','routine','week','life'];
+  const idx = map.indexOf(id);
+  if(idx >= 0) btns[idx].classList.add('active');
+}
+
+function showDay(day) {
+  document.querySelectorAll('.day-card').forEach(c => c.classList.remove('active'));
+  document.querySelectorAll('.day-detail').forEach(d => d.classList.remove('active'));
+  const cards = document.querySelectorAll('.day-card');
+  const days = ['mon','tue','wed','thu','fri','sat','sun'];
+  const idx = days.indexOf(day);
+  if(idx >= 0) cards[idx].classList.add('active');
+  const detail = document.getElementById('day-' + day);
+  if(detail) detail.classList.add('active');
+}
+</script>
+</body>
+</html>
